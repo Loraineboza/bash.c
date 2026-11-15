@@ -1,0 +1,18 @@
+name: Shell build smoke test
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile shell
+        run: cc -std=c11 -Wall -Wextra shell.c -o shell
+      - name: Builtin command smoke test
+        run: printf 'echo shell-smoke-ok\nexit\n' | ./shell
+      - name: Pipeline smoke test
+        run: printf 'printf x | wc -c\nexit\n' | ./shell
